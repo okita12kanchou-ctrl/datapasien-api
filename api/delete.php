@@ -1,5 +1,4 @@
 <?php
-// delete.php - Delete patient
 require_once 'db.php';
 
 $conn = getConnection();
