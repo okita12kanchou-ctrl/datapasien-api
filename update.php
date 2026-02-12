@@ -1,5 +1,6 @@
 <?php
-// api/update.php - Update patient
+// update.php - Update patient
+require_once 'db.php';
 
 $conn = getConnection();
 if (!$conn) {
