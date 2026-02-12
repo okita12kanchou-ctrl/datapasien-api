@@ -1,5 +1,4 @@
 <?php
-// get.php - Get all patients
 require_once 'db.php';
 
 $conn = getConnection();
