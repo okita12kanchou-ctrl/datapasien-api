@@ -1,15 +1,16 @@
 <?php
 function getConnection() {
-    // 🔥 INFINITYFREE - GRATIS SELAMANYA!
-    $host = 'sql308.infinityfree.com';
-    $username = 'if0_41109553';
-    $password = 'Honkai013';
-    $database = 'if0_41109553_datapasien';
+    // 🔥 RAILWAY MYSQL - GRATIS 1GB!
+    $host = 'mysql.railway.internal';
+    $port = 3306;
+    $username = 'root';
+    $password = 'hrnpbMQqAWdhYedqRyItKMVJftzVbbjw';
+    $database = 'railway';
     
-    $conn = mysqli_connect($host, $username, $password, $database);
+    $conn = mysqli_connect($host, $username, $password, $database, $port);
     
     if (!$conn) {
-        error_log("InfinityFree connection failed: " . mysqli_connect_error());
+        error_log("Railway MySQL connection failed: " . mysqli_connect_error());
         return null;
     }
     
