@@ -1,5 +1,6 @@
 <?php
-// api/delete.php - Delete patient
+// delete.php - Delete patient
+require_once 'db.php';
 
 $conn = getConnection();
 if (!$conn) {
