@@ -1,96 +1,56 @@
 <?php
-// index.php - API Information & Status
-require_once 'db.php';
-
-// Test database connection
-$db_status = 'Unknown';
-$db_message = '';
-$total_pasien = 0;
-
-$conn = getConnection();
-if ($conn) {
-    $db_status = 'Connected';
-    $result = mysqli_query($conn, "SELECT COUNT(*) as total FROM pasien");
-    if ($result) {
-        $row = mysqli_fetch_assoc($result);
-        $total_pasien = $row['total'];
-        $db_message = 'Database connected successfully';
-    } else {
-        $db_message = 'Table pasien belum ada atau error: ' . mysqli_error($conn);
-    }
-    mysqli_close($conn);
-} else {
-    $db_status = 'Failed';
-    $db_message = 'Database connection failed - cek credentials';
-}
-
-// API Information
-$response = [
-    'status' => 'online',
-    'message' => 'Data Pasien Klinik API',
-    'version' => '1.0.0',
-    'server_time' => date('Y-m-d H:i:s'),
-    'timezone' => date_default_timezone_get(),
-    'database' => [
-        'type' => 'TiDB Serverless',
-        'status' => $db_status,
-        'message' => $db_message,
-        'total_pasien' => $total_pasien
-    ],
-    'endpoints' => [
-        [
-            'method' => 'GET',
-            'url' => '/get.php',
-            'description' => 'Ambil semua data pasien'
-        ],
-        [
-            'method' => 'POST',
-            'url' => '/insert.php',
-            'description' => 'Tambah pasien baru',
-            'body' => [
-                'nama' => 'string',
-                'usia' => 'integer',
-                'keluhan' => 'string',
-                'nomor_rekam_medis' => 'string (unique)'
-            ]
-        ],
-        [
-            'method' => 'PUT',
-            'url' => '/update.php',
-            'description' => 'Update data pasien',
-            'body' => [
-                'id' => 'integer',
-                'nama' => 'string (optional)',
-                'usia' => 'integer (optional)',
-                'keluhan' => 'string (optional)',
-                'nomor_rekam_medis' => 'string (optional)'
-            ]
-        ],
-        [
-            'method' => 'DELETE',
-            'url' => '/delete.php',
-            'description' => 'Hapus pasien',
-            'body' => [
-                'id' => 'integer'
-            ]
-        ]
-    ],
-    'example_requests' => [
-        'get_all' => 'GET https://datapasien-api.vercel.app/get.php',
-        'insert' => 'POST https://datapasien-api.vercel.app/insert.php',
-        'update' => 'PUT https://datapasien-api.vercel.app/update.php',
-        'delete' => 'DELETE https://datapasien-api.vercel.app/delete.php'
-    ],
-    'developer' => 'Created for Data Pasien Klinik Android App',
-    'contact' => 'support@datapasienklinik.com'
-];
-
-// Set headers
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
-// Output JSON with pretty print
-echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+// Handle preflight request
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+require_once 'db.php';
+
+$method = $_SERVER['REQUEST_METHOD'];
+$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$path = str_replace('/api', '', $path);
+
+switch (true) {
+    case $path === '/' || $path === '':
+        echo json_encode([
+            'status' => 'API is running',
+            'version' => '1.0',
+            'endpoints' => [
+                'GET /api/get' => 'Get all patients',
+                'POST /api/insert' => 'Add new patient',
+                'PUT /api/update' => 'Update patient',
+                'DELETE /api/delete' => 'Delete patient'
+            ]
+        ]);
+        break;
+        
+    case $path === '/get' && $method === 'GET':
+        require 'get.php';
+        break;
+        
+    case $path === '/insert' && $method === 'POST':
+        require 'insert.php';
+        break;
+        
+    case $path === '/update' && $method === 'PUT':
+        require 'update.php';
+        break;
+        
+    case $path === '/delete' && $method === 'DELETE':
+        require 'delete.php';
+        break;
+        
+    default:
+        http_response_code(404);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Endpoint not found'
+        ]);
+}
 ?>
