@@ -1,16 +1,15 @@
 <?php
 function getConnection() {
-    // GANTI DENGAN CREDENTIALS PLANETSCALE ANDA
-    $host = 'aws.connect.psdb.cloud';
-    $username = '2n9zq7x5p3r1'; // Ganti dengan username Anda
-    $password = 'pscale_pw_MxLkPqRsT123'; // Ganti dengan password Anda
-    $database = 'datapasien_db';
+    // 🔥 INFINITYFREE - GRATIS SELAMANYA!
+    $host = 'sql308.infinityfree.com';
+    $username = 'if0_41109553';
+    $password = 'Honkai013';
+    $database = 'if0_41109553_datapasien';
     
-    $conn = mysqli_init();
-    mysqli_ssl_set($conn, NULL, NULL, "/etc/ssl/certs/ca-certificates.crt", NULL, NULL);
+    $conn = mysqli_connect($host, $username, $password, $database);
     
-    if (!mysqli_real_connect($conn, $host, $username, $password, $database, 3306, NULL, MYSQLI_CLIENT_SSL)) {
-        error_log("Database connection failed: " . mysqli_connect_error());
+    if (!$conn) {
+        error_log("InfinityFree connection failed: " . mysqli_connect_error());
         return null;
     }
     
@@ -33,7 +32,7 @@ function jsonResponse($success, $message, $data = null) {
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
     header('Access-Control-Allow-Headers: Content-Type, Authorization');
     
-    echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    echo json_encode($response, JSON_UNESCAPED_UNICODE);
     exit;
 }
 ?>
