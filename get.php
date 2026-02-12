@@ -1,5 +1,6 @@
 <?php
-// api/get.php - Get all patients
+// get.php - Get all patients
+require_once 'db.php';
 
 $conn = getConnection();
 if (!$conn) {
