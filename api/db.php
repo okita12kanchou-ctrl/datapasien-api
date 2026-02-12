@@ -1,16 +1,15 @@
 <?php
 function getConnection() {
-    // 🔥 RAILWAY MYSQL - GRATIS 1GB!
-    $host = 'mysql.railway.internal';
-    $port = 3306;
-    $username = 'root';
-    $password = 'hrnpbMQqAWdhYedqRyItKMVJftzVbbjw';
-    $database = 'railway';
+    // 🔥 FREESQLDATABASE.COM - GRATIS 100%!
+    $host = 'sql12.freesqldatabase.com';
+    $username = 'sql12816891';
+    $password = 'u5szNvBnyz';
+    $database = 'sql12816891';
     
-    $conn = mysqli_connect($host, $username, $password, $database, $port);
+    $conn = mysqli_connect($host, $username, $password, $database);
     
     if (!$conn) {
-        error_log("Railway MySQL connection failed: " . mysqli_connect_error());
+        error_log("FreeSQLDatabase connection failed: " . mysqli_connect_error());
         return null;
     }
     
