@@ -1,5 +1,6 @@
 <?php
-// api/insert.php - Insert new patient
+// insert.php - Insert new patient
+require_once 'db.php';
 
 $conn = getConnection();
 if (!$conn) {
